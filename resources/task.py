@@ -2,6 +2,8 @@ from models.task import TaskModel
 from flask_restful import Resource,reqparse
 from flasgger import swag_from
 
+from utils import paginated_results
+
 
 class Task(Resource):
 
@@ -16,3 +18,18 @@ class Task(Resource):
         if tarea:
             return tarea.json()
         return {'message':'No se encuentra la Tarea'},404
+
+    # def put(self, id):
+    
+    # def delete(self, id):
+
+class TaskList(Resource):
+    @swag_from('../swagger/task/list_task.yaml')
+    def get(self):
+        query = TaskModel.query
+        return paginated_results(query)
+
+    # def post(self):
+
+# class TaskSearch(Resource):
+    # def post(self):

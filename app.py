@@ -1,6 +1,6 @@
 from flask import Flask, redirect
 
-from resources.task import Task
+from resources.task import Task, TaskList
 from flask_restful import Api
 from flasgger import Swagger
 
@@ -52,8 +52,8 @@ app.config['SQLALCHEMY_ECHO'] = False
 def welcome():
    return redirect(f"{PREFIX}/apidocs", code=302)
  
-api.add_resource(Task, f'{PREFIX}/task/<id>')
-
+api.add_resource(Task, f'{PREFIX}/tasks/<id>')
+api.add_resource(TaskList, f'{PREFIX}/tasks')
 
 # Bloque opcional para ejecutar con python app.py
 if __name__ == '__main__':
