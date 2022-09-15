@@ -18,10 +18,23 @@ class Task(Resource):
         if tarea:
             return tarea.json()
         return {'message':'No se encuentra la Tarea'},404
-
-    # def put(self, id):
     
-    # def delete(self, id):
+    @swag_from('../swagger/task/put_task.yaml')
+    def put(self, id):
+        tarea = TaskModel.find_by_id(id)
+        if tarea:
+            newdata = Task.parser.parse_args()
+            tarea.from_reqparse(newdata)
+            tarea.save_to_db()
+            return tarea.json()
+
+    @swag_from('../swagger/task/delete_task.yaml')
+    def delete(self, id):
+        tarea = TaskModel.find_by_id(id)
+        if tarea:
+            tarea.delete_from_db()
+        
+        return {'message': 'Se ha borrado la tarea'}
 
 class TaskList(Resource):
     @swag_from('../swagger/task/list_task.yaml')
