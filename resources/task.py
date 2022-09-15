@@ -7,11 +7,12 @@ class Task(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('id',type=int)
-    parser.add_argument('description', type = str)
+    parser.add_argument('descrip', type = str)
+    parser.add_argument('status', type=str)
 
     @swag_from('../swagger/task/get_task.yaml')
     def get(self, id):
-        tarea = TaskModel(1,"Hola Mundo")
+        tarea = TaskModel.find_by_id(id)
         if tarea:
             return tarea.json()
         return {'message':'No se encuentra la Tarea'},404

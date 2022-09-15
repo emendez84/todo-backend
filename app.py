@@ -4,6 +4,8 @@ from resources.task import Task
 from flask_restful import Api
 from flasgger import Swagger
 
+from db import db
+
 import os
 
 app = Flask(__name__)
@@ -32,6 +34,19 @@ app.config['SWAGGER'] = {
 }
 swagger = Swagger(app)
 
+# Function to facilitate the app configuration from environment variables
+def env_config(name, default):
+   app.config[name] = os.environ.get(name, default=default)
+
+#Database config
+env_config('SQLALCHEMY_DATABASE_URI','postgresql://postgres:postgres@localhost:5432/todo')
+
+#SQLAlchemy config
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['SQLALCHEMY_ECHO'] = False
+
+
 @app.route('/')
 @app.route(f'{PREFIX}')
 def welcome():
@@ -42,4 +57,7 @@ api.add_resource(Task, f'{PREFIX}/task/<id>')
 
 # Bloque opcional para ejecutar con python app.py
 if __name__ == '__main__':
+    db.init_app(app)
     app.run()
+else:
+    db.init_app(app)
