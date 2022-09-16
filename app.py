@@ -1,6 +1,6 @@
 from flask import Flask, redirect
 
-from resources.task import Task, TaskList
+from resources.task import Task, TaskList, TaskSearch
 from flask_restful import Api
 from flasgger import Swagger
 
@@ -54,6 +54,7 @@ def welcome():
  
 api.add_resource(Task, f'{PREFIX}/tasks/<id>')
 api.add_resource(TaskList, f'{PREFIX}/tasks')
+api.add_resource(TaskSearch, f'{PREFIX}/search/tasks')
 
 # Bloque opcional para ejecutar con python app.py
 if __name__ == '__main__':

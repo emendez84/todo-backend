@@ -42,8 +42,20 @@ class TaskList(Resource):
     def get(self):
         query = TaskModel.query
         return paginated_results(query)
+    
+    @swag_from('../swagger/task/post_task.yaml')
+    def post(self):
+        data = Task.parser.parse_args()
 
-    # def post(self):
+        tarea = TaskModel(**data)
+
+        try:
+            tarea.save_to_db()
+        except Exception as e:
+            print(e)
+            return {'message':'Ocurrio un error al crear la tarea'}, 500
+
+        return tarea.json(), 201
 
 class TaskSearch(Resource):
     @swag_from('../swagger/task/search_task.yaml')

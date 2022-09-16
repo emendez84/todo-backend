@@ -1,21 +1,19 @@
-Buscador de tareas
+Crear una tarea
 ---
 tags:
-- "search"
+- "task"
 responses:
-  200:
-    description: Busqueda realizada correctamente
+  201:
+    description: Se creo correctamente la tarea
+  500:
+    description: Error en la creacion de la tarea
 parameters:
-  - name: query
-    in: page
-    description: Tareas actuales de la pagina
-    default: 1
   - name: body
     in: body
     schema:
-      $ref: "#/definitions/TaskSearch"
+      $ref: "#/definitions/Taskpost"
 definitions:
-  TaskSearch:
+  Taskpost:
     type: "object"
     properties:
       id:
@@ -25,6 +23,5 @@ definitions:
       status:
         type: "string"
     example:
-      id: 17
       descrip: "bla bla"
       status: "bla bla"
