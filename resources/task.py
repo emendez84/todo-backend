@@ -1,8 +1,9 @@
 from models.task import TaskModel
 from flask_restful import Resource,reqparse
 from flasgger import swag_from
+from flask import request
 
-from utils import paginated_results
+from utils import paginated_results,restrict
 
 
 class Task(Resource):
@@ -44,5 +45,14 @@ class TaskList(Resource):
 
     # def post(self):
 
-# class TaskSearch(Resource):
-    # def post(self):
+class TaskSearch(Resource):
+    @swag_from('../swagger/task/search_task.yaml')
+    def post(self):
+        query = TaskModel.query
+        if request.json:
+            filtros = request.json
+            query = restrict(query,filtros,'id',lambda x: TaskModel.id  == x)
+            query = restrict(query,filtros,'descrip',lambda x: TaskModel.descrip.contains(x))
+            query = restrict(query,filtros,'status',lambda x: TaskModel.status.contains(x))
+
+        return paginated_results(query)
